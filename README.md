@@ -251,3 +251,35 @@ Le fichier `.env.example` contient uniquement des valeurs fictives.
 ![État des quatre services Docker Compose](docs/captures/docker-compose-ps.png)
 
 ![Adminer connecté à la base cda](docs/captures/adminer-competences.png)
+
+## Fiche 3 — Exercice 4 : Test du clone GitHub (bonus)
+
+### Test du dépôt sur un clone neuf
+
+Le dépôt `environnement-cda` a été cloné depuis GitHub dans `C:\dev\essais\test-clone`.
+Le fichier `.env` était absent du clone, conformément aux règles de sécurité Git. Il a été créé à partir de `.env.example`.
+
+La commande `docker compose config --quiet` a réussi.
+
+### Difficultés rencontrées
+
+- Les chemins relatifs `../ma-page-dev` ne fonctionnaient plus depuis le dossier `test-clone`.
+- Le projet nécessite le dossier `ma-page-dev` à côté de `environnement-cda`.
+- Le volume externe `cda-donnees` est nécessaire pour retrouver les données du projet principal.
+
+Pour ce test, les chemins ont été adaptés et un volume MySQL indépendant a été utilisé afin de protéger les données principales.
+
+### Vérification de santé MySQL
+
+Le clone a démarré avec `docker compose up -d`.
+
+La commande `docker inspect` a confirmé :
+
+- Status : `healthy`
+- FailingStreak : `0`
+- ExitCode : `0` pour les cinq dernières vérifications.
+
+### Conclusion
+
+Le clone a fonctionné après adaptation de ses chemins et de ses variables d'environnement.
+Le clone a ensuite été arrêté avec `docker compose down`, puis l'environnement principal a été redémarré avec succès.

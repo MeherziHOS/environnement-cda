@@ -158,3 +158,9 @@ Après redémarrage, la requête `SELECT * FROM competences;` a retrouvé les ci
 > Any pre-existing database will always be left untouched on container startup.
 
 **Traduction :** Toute base de données préexistante reste inchangée au démarrage du conteneur.
+
+### Fiche 2 — Exercice 4 : MongoDB (bonus)
+
+Dans MySQL, la table `competences` possède une structure définie avec les mêmes colonnes (`id`, `nom`, `niveau`) pour chaque ligne.
+
+Dans MongoDB, les documents de la collection `livres` peuvent avoir des champs différents : le deuxième livre possède un champ `genre` absent du premier.

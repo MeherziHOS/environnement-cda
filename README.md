@@ -73,3 +73,14 @@ Le dossier `dist` étant monté dans le conteneur, les modifications sont dispon
 - Port publié uniquement sur `127.0.0.1:8080`.
 - Dossier du site monté en lecture seule.
 - Fichier `.env` exclu du dépôt Git.
+
+## 4. Comparaison des images Docker
+
+J'ai comparé les images officielles `httpd:2.4` et `httpd:2.4-alpine` sur Docker Hub.
+
+- `httpd:2.4` : 177 Mo d'espace disque.
+- `httpd:2.4-alpine` : 97,4 Mo d'espace disque.
+
+**Justification :**
+
+J'ai choisi `httpd:2.4` car c'est une image officielle Apache adaptée à notre environnement de formation. Même si la variante Alpine est plus légère, la version standard offre un environnement plus classique pour apprendre et effectuer les exercices. Elle permet mieux de servir mon portfolio `ma-page-dev` avec Apache.

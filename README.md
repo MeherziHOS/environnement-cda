@@ -164,3 +164,90 @@ Après redémarrage, la requête `SELECT * FROM competences;` a retrouvé les ci
 Dans MySQL, la table `competences` possède une structure définie avec les mêmes colonnes (`id`, `nom`, `niveau`) pour chaque ligne.
 
 Dans MongoDB, les documents de la collection `livres` peuvent avoir des champs différents : le deuxième livre possède un champ `genre` absent du premier.
+
+## Fiche 3 — Exercice 2 : Docker Compose documentation
+
+1 - What is the difference between a container that is "running" and a service that is "ready"? Why does it matter for a database?
+A running container is started, but its service may not be ready to accept connections.
+This matters for a database because it needs time to initialize before accepting connections.
+
+2 - In the compose.yaml of environnement-cda, which service waits for which, and what makes the db service "healthy"?
+In our planned compose.yaml, the adminer service waits for the db service.
+The db service becomes healthy when its healthcheck runs mysqladmin ping successfully.
+
+## Fiche 3 — Exercice 3 : Démarrer l'environnement avec Docker Compose
+
+### Prérequis
+
+- Docker Desktop démarré avec le moteur actif
+- Node.js et npm pour construire le portfolio
+- Fichier `.env` configuré à partir de `.env.example`
+- Dossiers `environnement-cda` et `ma-page-dev` dans `C:\dev`
+
+### Démarrage
+
+Construire le portfolio :
+
+```powershell
+cd C:\dev\ma-page-dev
+npm run build
+```
+
+Démarrer les quatre services :
+
+```powershell
+cd C:\dev\environnement-cda
+docker compose up -d
+docker compose ps
+```
+
+### Services et adresses
+
+| Service | Adresse               | Utilité                         |
+| ------- | --------------------- | ------------------------------- |
+| Apache  | http://localhost:8080 | Portfolio construit             |
+| Adminer | http://localhost:8081 | Administration MySQL            |
+| MySQL   | 127.0.0.1:3307        | Base de données                 |
+| Vite    | http://localhost:5173 | Développement avec rechargement |
+
+Connexion Adminer :
+
+- Système : MySQL / MariaDB
+- Serveur : `db`
+- Utilisateur : `cda`
+- Base de données : `cda`
+- Mot de passe : défini localement dans `.env`
+
+### Commandes utiles
+
+```powershell
+docker compose ps
+docker compose logs db
+docker compose logs -f node
+docker compose down
+docker compose up -d
+```
+
+### Test de persistance
+
+J'ai arrêté les quatre services avec `docker compose down`, puis je les ai redémarrés avec `docker compose up -d`.
+
+MySQL est revenu en état `healthy`.
+
+La table `competences` contient toujours ses cinq lignes : HTML, CSS, JavaScript, PHP et Docker.
+
+Les données sont conservées grâce au volume nommé `cda-donnees`, réutilisé dans Compose.
+
+### Sécurité
+
+Les mots de passe sont conservés dans `.env`, exclu de Git grâce à `.gitignore`.
+
+Le fichier `.env.example` contient uniquement des valeurs fictives.
+
+**Attention :** ne jamais utiliser `docker compose down -v` sans vérifier les volumes concernés. Cette option peut supprimer définitivement des données.
+
+### Captures de vérification
+
+![État des quatre services Docker Compose](docs/captures/docker-compose-ps.png)
+
+![Adminer connecté à la base cda](docs/captures/adminer-competences.png)
